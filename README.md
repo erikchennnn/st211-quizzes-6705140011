@@ -50,6 +50,32 @@ pytest test_strict.py
 
 The error from this last command is intentional: `nonexistent_marker` is not registered in `pytest.ini`.
 
+## Parametrization lab (12 October 2026)
+
+The `param_lab` folder practices running the same test with multiple inputs using `pytest.mark.parametrize`.
+
+- `mathutils.py` implements even-number checking and factorial calculation.
+- `test_param.py` checks five even numbers and five odd numbers.
+- `test_factorial.py` checks factorials from 0 through 5.
+- `discount.py` calculates percentage discounts and rejects percentages outside 0-100.
+- `test_discount.py` checks five discount cases, including no discount and a full discount.
+- `test_multi.py` stacks parametrization decorators to generate all six combinations of three `x` values and two `y` values.
+- `test_default_ids.py` demonstrates pytest's generated IDs for dictionary inputs.
+- `test_param_ids.py` uses `pytest.param(..., id=...)` to give discount cases readable names.
+- `test_param_marks.py` adds IDs and an `xfail` marker to individual cases. The `known_bug` case deliberately expects `5 ** 2` to equal 20 to demonstrate an expected failure.
+
+Run all tests from today's lab from the repository root:
+
+```powershell
+python -m pytest param_lab -v
+```
+
+The expected result is **34 passed, 1 xfailed**. To inspect the generated test IDs without running the tests:
+
+```powershell
+python -m pytest param_lab --collect-only -q
+```
+
 ## Run the tests
 
 From this folder, run:
@@ -57,5 +83,7 @@ From this folder, run:
 ```powershell
 python -m pytest -v
 ```
+
+The full run includes the intentional strict-marker collection error described above. Use the lab-specific command to run only the parametrization exercises.
 
 Project-only files are tracked in Git; the virtual environment and pytest/Python cache folders are excluded through `.gitignore`.
