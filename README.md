@@ -50,7 +50,7 @@ pytest test_strict.py
 
 The error from this last command is intentional: `nonexistent_marker` is not registered in `pytest.ini`.
 
-## Parametrization lab (12 October 2026)
+## Parametrization lab (12 and 19 October 2026)
 
 The `param_lab` folder practices running the same test with multiple inputs using `pytest.mark.parametrize`.
 
@@ -64,26 +64,41 @@ The `param_lab` folder practices running the same test with multiple inputs usin
 - `test_param_ids.py` uses `pytest.param(..., id=...)` to give discount cases readable names.
 - `test_param_marks.py` adds IDs and an `xfail` marker to individual cases. The `known_bug` case deliberately expects `5 ** 2` to equal 20 to demonstrate an expected failure.
 
-Run all tests from today's lab from the repository root:
+### Parameterized fixtures and external test data (19 October 2026)
+
+- `test_param_fixture.py` supplies Chrome, Firefox, and Safari names through a parameterized fixture. Two tests run for each name, producing six cases and demonstrating setup and teardown with `yield`.
+- `test_browsers.py` supplies SQLite, PostgreSQL, and MySQL names through a parameterized fixture, producing three cases. Despite the filename, this exercise uses database names.
+- These fixture examples use strings to demonstrate parameterization; they do not launch real browsers or connect to databases.
+- `test_cases.json` stores four input/expected-output pairs for uppercase conversion.
+- `test_data_driven.py` loads the JSON data and generates a separate uppercase test for each pair.
+- `logins.csv` stores four login-validation scenarios, including empty username and empty password cases.
+- `validate.py` checks that both username and password are nonempty. It does not authenticate users or block particular usernames.
+- `test_csv_driven.py` reads the CSV scenarios, converts the expected-result column to booleans, and checks each scenario independently.
+
+### Run the parametrization lab
+
+From the repository root, enter `param_lab` before running tests because the data loaders open JSON and CSV files relative to the current directory:
 
 ```powershell
-python -m pytest param_lab -v
+Set-Location param_lab
+python -m pytest -v
 ```
 
-The expected result is **34 passed, 1 xfailed**. To inspect the generated test IDs without running the tests:
+Verified on 19 October 2026: **51 passed, 1 xfailed**. The expected failure is the deliberate square example described above. To inspect the generated test IDs without running the tests, use the same directory:
 
 ```powershell
-python -m pytest param_lab --collect-only -q
+python -m pytest --collect-only -q
 ```
 
 ## Run the tests
 
-From this folder, run:
+With Python and pytest installed in your active environment, run each lab from its own directory. For example, from the repository root:
 
 ```powershell
+Set-Location testcase_lab
 python -m pytest -v
 ```
 
-The full run includes the intentional strict-marker collection error described above. Use the lab-specific command to run only the parametrization exercises.
+The assertion lab includes the intentional strict-marker collection error described above. The parametrization lab requires its own working directory for the external data files, so use its commands above rather than running every lab together from the repository root.
 
 Project-only files are tracked in Git; the virtual environment and pytest/Python cache folders are excluded through `.gitignore`.
